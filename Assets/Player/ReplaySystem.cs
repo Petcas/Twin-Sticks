@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class ReplaySystem : MonoBehaviour {
 
-	//private int recordIndex = 0;
-	private const int totalRecordedFrames = 60 * 50;
+	private bool record = true;
+	private int startFrame = 0;
+	private int endFrame = 0;
+	private const int totalRecordedFrames =  10 * 50; //number of seconds times 50 frames per second
 	private MyKeyFrame[] myReplay = new MyKeyFrame[totalRecordedFrames];
 	private Rigidbody rigidBody;
-
-	public bool record = true;
-
 
 
 	// Use this for initialization
@@ -21,13 +20,8 @@ public class ReplaySystem : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
-
-	void FixedUpdate () {
 
 		if (record) {
-
 			RecordKeyFrame ();
 		}else{
 			PlayBack ();
@@ -36,19 +30,34 @@ public class ReplaySystem : MonoBehaviour {
 	}
 
 	void PlayBack(){
-		rigidBody.isKinematic = false;
-		int frame = Time.frameCount % totalRecordedFrames;
+
+		rigidBody.isKinematic = true;
+		int frame = startFrame % totalRecordedFrames;
+		//Debug.Log ("Playing Back Frame: " + frame + "   startFrame: " + startFrame);
+		if (startFrame <= endFrame){
+			startFrame++;
+		}else{
+			startFrame = 0;
+		}
 		transform.position = myReplay [frame].position;
 		transform.rotation = myReplay [frame].rotation;
 
 	}
 
 	void RecordKeyFrame () {
-		rigidBody.isKinematic = true;
-		int frame = Time.frameCount % totalRecordedFrames;
+		
+		rigidBody.isKinematic = false;
+		int frame = startFrame % totalRecordedFrames;
+		startFrame++;
+		//Debug.Log ("Recording Frame: " + frame + "   startFrame: " + startFrame);
 		myReplay [frame] = new MyKeyFrame (Time.time, transform.position, transform.rotation);
-		//print ("Frame Rate: " + 1f / Time.deltaTime + "   Index: " + i + "   Time: " + myReplay [i].frameTime + "   Position: " + myReplay [i].position + "   Rotation: " + myReplay [i].rotation);
-		//recordIndex += 1;
+	}
+
+	void OnSetRecording(bool recording){
+		
+		record = recording;
+		endFrame = startFrame;
+		startFrame = 0;
 	}
 
 
