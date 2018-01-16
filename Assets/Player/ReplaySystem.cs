@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class ReplaySystem : MonoBehaviour {
 
-	private int recordIndex = 0;
-	private static int totalRecordedFrames = 60 * 50;
+	//private int recordIndex = 0;
+	private const int totalRecordedFrames = 60 * 50;
 	private MyKeyFrame[] myReplay = new MyKeyFrame[totalRecordedFrames];
+	private Rigidbody rigidBody;
+
+	public bool record = true;
 
 
 
 	// Use this for initialization
 	void Start () {
+		rigidBody = GetComponent<Rigidbody> ();
 		
 	}
 	
@@ -22,17 +26,35 @@ public class ReplaySystem : MonoBehaviour {
 
 	void FixedUpdate () {
 
-		RecordKeyFrame ();
+		if (record) {
+
+			RecordKeyFrame ();
+		}else{
+			PlayBack ();
+		}
+
+	}
+
+	void PlayBack(){
+		rigidBody.isKinematic = false;
+		int frame = Time.frameCount % totalRecordedFrames;
+		transform.position = myReplay [frame].position;
+		transform.rotation = myReplay [frame].rotation;
 
 	}
 
 	void RecordKeyFrame () {
-		int i = recordIndex % totalRecordedFrames;
-		myReplay [i] = new MyKeyFrame (Time.time, transform.position, transform.rotation);
+		rigidBody.isKinematic = true;
+		int frame = Time.frameCount % totalRecordedFrames;
+		myReplay [frame] = new MyKeyFrame (Time.time, transform.position, transform.rotation);
 		//print ("Frame Rate: " + 1f / Time.deltaTime + "   Index: " + i + "   Time: " + myReplay [i].frameTime + "   Position: " + myReplay [i].position + "   Rotation: " + myReplay [i].rotation);
-		recordIndex += 1;
+		//recordIndex += 1;
 	}
 
+
+	/// <summary>
+	/// A structure for storing time position and rotation of an object.
+	/// </summary>
 	public struct MyKeyFrame {
 
 		public float frameTime;
