@@ -15,5 +15,7 @@ public class PlayerController : MonoBehaviour {
 
 		print ("H: " + CrossPlatformInputManager.GetAxis("Horizontal"));
 		print ("V: " + CrossPlatformInputManager.GetAxis("Vertical")); 
+		ReplaySystem.MyKeyFrame myKeyFrame = new ReplaySystem.MyKeyFrame (Time.time, transform.position, transform.rotation);
+		print ("Time: " + myKeyFrame.frameTime + "   Position: " + myKeyFrame.position + "   Rotation: " + myKeyFrame.rotation); 
 	}
 }
