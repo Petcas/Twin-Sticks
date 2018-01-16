@@ -54,6 +54,7 @@
      <Compile Include="Assets\GameManager.cs" />
      <Compile Include="Assets\Player\PlayerController.cs" />
      <Compile Include="Assets\Player\ReplaySystem.cs" />
+     <Compile Include="Assets\PlayerPrefsManager.cs" />
      <None Include="Assets\Standard Assets\Fonts\OpenSans\License!.txt" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
